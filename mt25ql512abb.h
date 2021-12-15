@@ -331,34 +331,54 @@ typedef enum {
   */
 /* Function by commands combined */
 int32_t MT25QL512ABB_GetFlashInfo(MT25QL512ABB_Info_t *pInfo);
-int32_t MT25QL512ABB_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_QUAD_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_OCTO_AutoPollingMemReady(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
 
 /* Read/Write Array Commands **************************************************/
-int32_t MT25QL512ABB_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
-int32_t MT25QL512ABB_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
-int32_t MT25QL512ABB_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size);
-int32_t MT25QL512ABB_BlockErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize);
-int32_t MT25QL512ABB_ChipErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
-int32_t MT25QL512ABB_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
-int32_t MT25QL512ABB_EnableMemoryMappedModeDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
+int32_t MT25QL512ABB_QUAD_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
+int32_t MT25QL512ABB_OCTO_ReadSTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
+int32_t MT25QL512ABB_QUAD_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
+int32_t MT25QL512ABB_OCTO_ReadDTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size);
+int32_t MT25QL512ABB_QUAD_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size);
+int32_t MT25QL512ABB_OCTO_PageProgram(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size);
+int32_t MT25QL512ABB_QUAD_BlockErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize);
+int32_t MT25QL512ABB_OCTO_BlockErase(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize);
+int32_t MT25QL512ABB_QUAD_ChipErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_ChipErase(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
+int32_t MT25QL512ABB_OCTO_EnableMemoryMappedModeSTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
+int32_t MT25QL512ABB_QUAD_EnableMemoryMappedModeDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
+int32_t MT25QL512ABB_OCTO_EnableMemoryMappedModeDTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize);
 
 /* Register/Setting Commands **************************************************/
-int32_t MT25QL512ABB_WriteEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
-int32_t MT25QL512ABB_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
-int32_t MT25QL512ABB_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
-int32_t MT25QL512ABB_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
-int32_t MT25QL512ABB_WriteEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
-int32_t MT25QL512ABB_EnterQPIMode(QSPI_HandleTypeDef *Ctx);
-int32_t MT25QL512ABB_ExitQPIMode(QSPI_HandleTypeDef *Ctx);
-int32_t MT25QL512ABB_Enter4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
-int32_t MT25QL512ABB_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_WriteEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_OCTO_WriteEnable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_QUAD_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_WriteDisable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_OCTO_ReadStatusRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_QUAD_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_OCTO_ReadEnhancedVolCfgRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_QUAD_WriteEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_OCTO_WriteEnhancedVolCfgRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value);
+int32_t MT25QL512ABB_QUAD_EnterQPIMode(QSPI_HandleTypeDef *Ctx);
+int32_t MT25QL512ABB_OCTO_EnterQPIMode(OSPI_HandleTypeDef *Ctx);
+int32_t MT25QL512ABB_QUAD_ExitQPIMode(QSPI_HandleTypeDef *Ctx);
+int32_t MT25QL512ABB_OCTO_ExitQPIMode(OSPI_HandleTypeDef *Ctx);
+int32_t MT25QL512ABB_QUAD_Enter4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_Enter4BytesAddressMode(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_Exit4BytesAddressMode(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
 
 /* ID/Security Commands *******************************************************/
-int32_t MT25QL512ABB_ReadID(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_QUAD_ReadID(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash);
+int32_t MT25QL512ABB_OCTO_ReadID(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash);
 
 /* Reset Commands *************************************************************/
-int32_t MT25QL512ABB_ResetEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
-int32_t MT25QL512ABB_ResetMemory(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_ResetEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_ResetEnable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_QUAD_ResetMemory(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
+int32_t MT25QL512ABB_OCTO_ResetMemory(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode);
 
 /**
   * @}

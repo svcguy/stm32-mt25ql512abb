@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    mt25ql512abb.c
  * @modify  MCD Application Team
- * @brief   This file provides the MT25QL512ABB QSPI drivers.
+ * @brief   This file provides the MT25QL512ABB QSPI and OSPI drivers.
  ******************************************************************************
  * MT25QL512ABB action :
  *   Quad IO protocol (QP) and Dual IO protocol (DP) bits of Enhanced Volatile
@@ -20,6 +20,10 @@
  *   DTR(Double Transfer Rate) modes
  *
  *   Dual flash mode is supported: register read and write is double size
+ * 
+ *   Functions are marked MT25QL512ABB_XXXX_FunctionName(xSPI_HandleTypeDef *Ctx, ...)
+ *   XXXX = QUAD -or- OCTO
+ *   xSPI_HandleTypeDef = QSPI_HandleTypeDef or OSPI_HandleTypeDef
  *
  ******************************************************************************
   * @attention
@@ -55,7 +59,7 @@
   */
 
 /**
-  * @brief  Get Flash information
+  * @brief  Get Flash information (QUAD, OCTO)
   * @param  pInfo pointer to information structure
   * @retval error status
   */
@@ -76,14 +80,14 @@ int32_t MT25QL512ABB_GetFlashInfo(MT25QL512ABB_Info_t *pInfo)
 };
 
 /**
-  * @brief  Polling WIP(Write In Progress) bit become to 0
+  * @brief  QUAD Polling WIP(Write In Progress) bit become to 0
   *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @param  DualFlash Dual flash mode state
   * @retval error status
   */
-int32_t MT25QL512ABB_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
+int32_t MT25QL512ABB_QUAD_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
 {
   QSPI_CommandTypeDef      s_command;
   QSPI_AutoPollingTypeDef  s_config;
@@ -115,9 +119,25 @@ int32_t MT25QL512ABB_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_I
   return MT25QL512ABB_OK;
 }
 
+/**
+  * @brief  OCTO Polling WIP(Write In Progress) bit become to 0
+  *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  DualFlash Dual flash mode state
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_AutoPollingMemReady(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
+{
+  // TODO
+  
+
+  return MT25QL512ABB_OK;
+}
+
 /* Read/Write Array Commands (3/4 Byte Address Command Set) *********************/
 /**
-  * @brief  Reads an amount of data from the QSPI memory on STR mode.
+  * @brief  QUAD Reads an amount of data from the QSPI memory on STR mode.
   *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -127,7 +147,7 @@ int32_t MT25QL512ABB_AutoPollingMemReady(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_I
   * @param  Size Size of data to read
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
+int32_t MT25QL512ABB_QUAD_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -216,7 +236,25 @@ int32_t MT25QL512ABB_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t M
 }
 
 /**
-  * @brief  Reads an amount of data from the QSPI memory on DTR mode.
+  * @brief  OCTO Reads an amount of data from the QSPI memory on STR mode.
+  *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @param  pData Pointer to data to be read
+  * @param  ReadAddr Read start address
+  * @param  Size Size of data to read
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_ReadSTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Reads an amount of data from the QSPI memory on DTR mode.
   *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -228,7 +266,7 @@ int32_t MT25QL512ABB_ReadSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t M
   *         command is not available for the specified interface mode
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
+int32_t MT25QL512ABB_QUAD_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -317,7 +355,27 @@ int32_t MT25QL512ABB_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t M
 }
 
 /**
-  * @brief  Writes an amount of data to the QSPI memory.
+  * @brief  OCTO Reads an amount of data from the QSPI memory on DTR mode.
+  *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @param  pData Pointer to data to be read
+  * @param  ReadAddr Read start addressS
+  * @param  Size Size of data to read
+  * @note   Address size is forced to 3 Bytes when the 4 Bytes address size
+  *         command is not available for the specified interface mode
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_ReadDTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Writes an amount of data to the QSPI memory.
   *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -329,7 +387,7 @@ int32_t MT25QL512ABB_ReadDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t M
   *         command is not available for the specified interface mode
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size)
+int32_t MT25QL512ABB_QUAD_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -412,7 +470,27 @@ int32_t MT25QL512ABB_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface
 }
 
 /**
-  * @brief  Erases the specified block of the QSPI memory.
+  * @brief  OCTO Writes an amount of data to the QSPI memory.
+  *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @param  pData Pointer to data to be written
+  * @param  WriteAddr Write start address
+  * @param  Size Size of data to write. Range 1 ~ MT25QL512ABB_PAGE_SIZE
+  * @note   Address size is forced to 3 Bytes when the 4 Bytes address size
+  *         command is not available for the specified interface mode
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_PageProgram(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint8_t *pData, uint32_t WriteAddr, uint32_t Size)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Erases the specified block of the QSPI memory.
   *         MT25QL512ABB support 4K, 32K, 64K size block erase commands.
   *         SPI/DPI/QPI; 1-1-0/2-2-0/4-4-0
   * @param  Ctx Component object pointer
@@ -422,7 +500,7 @@ int32_t MT25QL512ABB_PageProgram(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface
   * @param  BlockSize Block size to erase
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_BlockErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize)
+int32_t MT25QL512ABB_QUAD_BlockErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize)
 {
   int32_t ret = MT25QL512ABB_OK;
   QSPI_CommandTypeDef s_command;
@@ -465,13 +543,34 @@ int32_t MT25QL512ABB_BlockErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_
 }
 
 /**
-  * @brief  Whole chip erase.
+  * @brief  OCTO Erases the specified block of the QSPI memory.
+  *         MT25QL512ABB support 4K, 32K, 64K size block erase commands.
+  *         SPI/DPI/QPI; 1-1-0/2-2-0/4-4-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @param  BlockAddress Block address to erase
+  * @param  BlockSize Block size to erase
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_BlockErase(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize, uint32_t BlockAddress, MT25QL512ABB_Erase_t BlockSize)
+{
+  // TODO
+  int32_t ret = MT25QL512ABB_OK;
+
+  return ret;
+}
+
+
+
+/**
+  * @brief  QUAD Whole chip erase.
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @retval error status
   */
-int32_t MT25QL512ABB_ChipErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_QUAD_ChipErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -496,14 +595,28 @@ int32_t MT25QL512ABB_ChipErase(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t
 }
 
 /**
-  * @brief  Enable memory mapped mode for the QSPI memory on STR mode.
+  * @brief  OCTO Whole chip erase.
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_ChipErase(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Enable memory mapped mode for the QSPI memory on STR mode.
   *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @param  AddressSize Address size
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
+int32_t MT25QL512ABB_QUAD_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
 {
   QSPI_CommandTypeDef      s_command;
   QSPI_MemoryMappedTypeDef s_mem_mapped_cfg;
@@ -588,7 +701,22 @@ int32_t MT25QL512ABB_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL51
 }
 
 /**
-  * @brief  Enable memory mapped mode for the QSPI memory on DTR mode.
+  * @brief  OCTO Enable memory mapped mode for the QSPI memory on STR mode.
+  *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_EnableMemoryMappedModeSTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Enable memory mapped mode for the QSPI memory on DTR mode.
   *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -597,7 +725,7 @@ int32_t MT25QL512ABB_EnableMemoryMappedModeSTR(QSPI_HandleTypeDef *Ctx, MT25QL51
   *         command is not available for the specified interface mode
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_EnableMemoryMappedModeDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
+int32_t MT25QL512ABB_QUAD_EnableMemoryMappedModeDTR(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
 {
   QSPI_CommandTypeDef      s_command;
   QSPI_MemoryMappedTypeDef s_mem_mapped_cfg;
@@ -681,17 +809,34 @@ int32_t MT25QL512ABB_EnableMemoryMappedModeDTR(QSPI_HandleTypeDef *Ctx, MT25QL51
   return MT25QL512ABB_OK;
 }
 
+/**
+  * @brief  OCTO Enable memory mapped mode for the QSPI memory on DTR mode.
+  *         SPI/DPI/QPI; 1-1-1/1-1-2/1-2-2/1-1-4/1-4-4/2-2-2/4-4-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  AddressSize Address size
+  * @note   Address size is forced to 3 Bytes when the 4 Bytes address size
+  *         command is not available for the specified interface mode
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_EnableMemoryMappedModeDTR(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_AddressSize_t AddressSize)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
 
 /* Register/Setting Commands **************************************************/
 /**
-  * @brief  This function send a Write Enable and wait it is effective.
+  * @brief  QUAD This function send a Write Enable and wait it is effective.
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @param  DualFlash Dual flash mode state
   * @retval error status
   */
-int32_t MT25QL512ABB_WriteEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
+int32_t MT25QL512ABB_QUAD_WriteEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
 {
   QSPI_CommandTypeDef     s_command;
   QSPI_AutoPollingTypeDef s_config;
@@ -733,13 +878,29 @@ int32_t MT25QL512ABB_WriteEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface
 }
 
 /**
-  * @brief  This function reset the (WEN) Write Enable Latch bit.
+  * @brief  OCTO This function send a Write Enable and wait it is effective.
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  DualFlash Dual flash mode state
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_WriteEnable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+
+/**
+  * @brief  QUAD This function reset the (WEN) Write Enable Latch bit.
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @retval error status
   */
-int32_t MT25QL512ABB_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_QUAD_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef     s_command;
 
@@ -764,7 +925,21 @@ int32_t MT25QL512ABB_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interfac
 }
 
 /**
-  * @brief  Read Flash Status register value
+  * @brief  OCTO This function reset the (WEN) Write Enable Latch bit.
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_WriteDisable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Read Flash Status register value
   *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -772,7 +947,7 @@ int32_t MT25QL512ABB_WriteDisable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interfac
   * @param  Value Status register value pointer
   * @retval error status
   */
-int32_t MT25QL512ABB_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+int32_t MT25QL512ABB_QUAD_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
 {
     QSPI_CommandTypeDef s_command;
 
@@ -804,7 +979,7 @@ int32_t MT25QL512ABB_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_In
 }
 
 /**
-  * @brief  Read Flash enhanced volatile configuration register value
+  * @brief  OCTO Read Flash Status register value
   *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -812,7 +987,23 @@ int32_t MT25QL512ABB_ReadStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_In
   * @param  Value Status register value pointer
   * @retval error status
   */
-int32_t MT25QL512ABB_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+int32_t MT25QL512ABB_OCTO_ReadStatusRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Read Flash enhanced volatile configuration register value
+  *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  DualFlash Dual flash mode state
+  * @param  Value Status register value pointer
+  * @retval error status
+  */
+int32_t MT25QL512ABB_QUAD_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
 {
     QSPI_CommandTypeDef s_command;
 
@@ -844,7 +1035,23 @@ int32_t MT25QL512ABB_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL5
 }
 
 /**
-  * @brief  Write enhanced volatile configuration register.
+  * @brief  OCTO Read Flash enhanced volatile configuration register value
+  *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  DualFlash Dual flash mode state
+  * @param  Value Status register value pointer
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_ReadEnhancedVolCfgRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Write enhanced volatile configuration register.
   *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
@@ -852,7 +1059,7 @@ int32_t MT25QL512ABB_ReadEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL5
   * @param  Value Value for write to enhanced configuration register.
   * @retval QSPI memory status
   */
-int32_t MT25QL512ABB_WriteEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+int32_t MT25QL512ABB_QUAD_WriteEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -884,13 +1091,29 @@ int32_t MT25QL512ABB_WriteEnhancedVolCfgRegister(QSPI_HandleTypeDef *Ctx, MT25QL
 }
 
 /**
-  * @brief  This function put QSPI memory in QPI mode (Quad I/O) from SPI mode.
+  * @brief  OCTO Write enhanced volatile configuration register.
+  *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  DualFlash Dual flash mode state
+  * @param  Value Value for write to enhanced configuration register.
+  * @retval QSPI memory status
+  */
+int32_t MT25QL512ABB_OCTO_WriteEnhancedVolCfgRegister(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, MT25QL512ABB_DualFlash_t DualFlash, uint8_t *Value)
+{
+  // TODO
+  
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD This function put QSPI memory in QPI mode (Quad I/O) from SPI mode.
   *         SPI -> QPI; 1-x-x -> 4-4-4
   *         SPI; 1-0-0
   * @param  Ctx Component object pointer
   * @retval error status
   */
-int32_t MT25QL512ABB_EnterQPIMode(QSPI_HandleTypeDef *Ctx)
+int32_t MT25QL512ABB_QUAD_EnterQPIMode(QSPI_HandleTypeDef *Ctx)
 {
   QSPI_CommandTypeDef      s_command;
 
@@ -916,13 +1139,27 @@ int32_t MT25QL512ABB_EnterQPIMode(QSPI_HandleTypeDef *Ctx)
 }
 
 /**
-  * @brief  This function put QSPI memory in SPI mode (Single I/O) from QPI mode.
+  * @brief  OCTO This function put QSPI memory in QPI mode (Quad I/O) from SPI mode.
+  *         SPI -> QPI; 1-x-x -> 4-4-4
+  *         SPI; 1-0-0
+  * @param  Ctx Component object pointer
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_EnterQPIMode(OSPI_HandleTypeDef *Ctx)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD This function put QSPI memory in SPI mode (Single I/O) from QPI mode.
   *         QPI -> SPI; 4-4-4 -> 1-x-x
   *         QPI; 4-0-0
   * @param  Ctx Component object pointer
   * @retval error status
   */
-int32_t MT25QL512ABB_ExitQPIMode(QSPI_HandleTypeDef *Ctx)
+int32_t MT25QL512ABB_QUAD_ExitQPIMode(QSPI_HandleTypeDef *Ctx)
 {
   QSPI_CommandTypeDef      s_command;
 
@@ -947,13 +1184,27 @@ int32_t MT25QL512ABB_ExitQPIMode(QSPI_HandleTypeDef *Ctx)
 }
 
 /**
-  * @brief  Flash enter 4 Byte address mode. Effect 3/4 address byte commands only.
+  * @brief  OCTO This function put QSPI memory in SPI mode (Single I/O) from QPI mode.
+  *         QPI -> SPI; 4-4-4 -> 1-x-x
+  *         QPI; 4-0-0
+  * @param  Ctx Component object pointer
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_ExitQPIMode(OSPI_HandleTypeDef *Ctx)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Flash enter 4 Byte address mode. Effect 3/4 address byte commands only.
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface mode
   * @retval error status
   */
-int32_t MT25QL512ABB_Enter4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_QUAD_Enter4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -978,12 +1229,26 @@ int32_t MT25QL512ABB_Enter4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512AB
 }
 
 /**
-  * @brief  Flash exit 4 Byte address mode. Effect 3/4 address byte commands only.
+  * @brief  OCTO Flash enter 4 Byte address mode. Effect 3/4 address byte commands only.
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_Enter4BytesAddressMode(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Flash exit 4 Byte address mode. Effect 3/4 address byte commands only.
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Component object pointer
   * @retval error status
   */
-int32_t MT25QL512ABB_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_QUAD_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -1007,9 +1272,22 @@ int32_t MT25QL512ABB_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB
   return MT25QL512ABB_OK;
 }
 
+/**
+  * @brief  OCTO Flash exit 4 Byte address mode. Effect 3/4 address byte commands only.
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Component object pointer
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_Exit4BytesAddressMode(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
 /* ID Commands ****************************************************************/
 /**
-  * @brief  Read Flash 3 Byte IDs.
+  * @brief  QUAD Read Flash 3 Byte IDs.
   *         Manufacturer ID, Memory type, Memory density
   *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
   * @param  Ctx Component object pointer
@@ -1018,7 +1296,7 @@ int32_t MT25QL512ABB_Exit4BytesAddressMode(QSPI_HandleTypeDef *Ctx, MT25QL512ABB
   * @param  DualFlash Dual flash mode state
   * @retval error status
   */
-int32_t MT25QL512ABB_ReadID(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash)
+int32_t MT25QL512ABB_QUAD_ReadID(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -1049,15 +1327,32 @@ int32_t MT25QL512ABB_ReadID(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mo
   return MT25QL512ABB_OK;
 }
 
+/**
+  * @brief  OCTO Read Flash 3 Byte IDs.
+  *         Manufacturer ID, Memory type, Memory density
+  *         SPI/DPI/QPI; 1-0-1/2-0-2/4-0-4
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface mode
+  * @param  ID 3 bytes IDs pointer
+  * @param  DualFlash Dual flash mode state
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_ReadID(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode, uint8_t *ID, MT25QL512ABB_DualFlash_t DualFlash)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
 /* Reset Commands *************************************************************/
 /**
-  * @brief  Flash reset enable command
+  * @brief  QUAD Flash reset enable command
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface select
   * @retval error status
   */
-int32_t MT25QL512ABB_ResetEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_QUAD_ResetEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -1082,13 +1377,27 @@ int32_t MT25QL512ABB_ResetEnable(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface
 }
 
 /**
-  * @brief  Flash reset memory command
+  * @brief  OCTO Flash reset enable command
   *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
   * @param  Ctx Component object pointer
   * @param  Mode Interface select
   * @retval error status
   */
-int32_t MT25QL512ABB_ResetMemory(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+int32_t MT25QL512ABB_OCTO_ResetEnable(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  QUAD Flash reset memory command
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface select
+  * @retval error status
+  */
+int32_t MT25QL512ABB_QUAD_ResetMemory(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
 {
   QSPI_CommandTypeDef s_command;
 
@@ -1108,6 +1417,20 @@ int32_t MT25QL512ABB_ResetMemory(QSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface
   {
     return MT25QL512ABB_ERROR;
   }
+
+  return MT25QL512ABB_OK;
+}
+
+/**
+  * @brief  OCTO Flash reset memory command
+  *         SPI/DPI/QPI; 1-0-0/2-0-0/4-0-0
+  * @param  Ctx Component object pointer
+  * @param  Mode Interface select
+  * @retval error status
+  */
+int32_t MT25QL512ABB_OCTO_ResetMemory(OSPI_HandleTypeDef *Ctx, MT25QL512ABB_Interface_t Mode)
+{
+  // TODO
 
   return MT25QL512ABB_OK;
 }
